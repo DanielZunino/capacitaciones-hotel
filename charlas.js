@@ -195,7 +195,7 @@ window.SI_IND_TRANSV = {
   });
   // 2b · solo prueba: carro de aseo tapando el extintor y la salida
   S.h_in_c_residuos = () => sv2(H.fondo.cocina() + basurero(170, 172, '#43A047') + basurero(210, 172, '#1E88E5') + basurero(250, 172, '#FDD835') + W(120, 176, { area: 'cocina', pose: 'carry' }) + `<path d="M132,124 h18 l-2,16 h-14z" fill="#455A64"/>` + `<path d="M40,170 l20,-6 l8,8 l-14,4z" fill="#A1887F"/><circle cx="74" cy="172" r="4" fill="#8BC34A"/>`);
-  S.h_in_c_manos = () => sv2(H.fondo.bano() + lavamanos(150, 165) + W(120, 176, { area: 'cocina', hair: true, pose: 'carry' }) + GG('h_in_up', [0, 1, 2].map(i => `<circle cx="${146 + i * 6}" cy="${114 - i * 4}" r="3" fill="#fff" stroke="#81D4FA"/>`).join('')));
+  S.h_in_c_manos = () => sv2(H.fondo.bano() + lavamanos(150, 165) + W(120, 176, { area: 'habitaciones', hair: true, pose: 'carry' }) + GG('h_in_up', [0, 1, 2].map(i => `<circle cx="${146 + i * 6}" cy="${114 - i * 4}" r="3" fill="#fff" stroke="#81D4FA"/>`).join('')));
 
   // 3 · Orden y limpieza / golpes / herramientas mal ubicadas (ítems 7, 32, 44)
   D('orden', q => {
@@ -444,7 +444,7 @@ window.SI_IND_TRANSV = {
     { s: 'h_in_empresa', t: 'Te damos la bienvenida al Hotel Salto del Laja',
       x: 'El Hotel Salto del Laja está junto al Salto del Laja, en Los Ángeles, y atiende <b>huéspedes en todo momento</b>. Es un recinto <b>mixto</b> y <b>mediano</b> (entre 500 y 2.500 metros cuadrados): sectores cerrados conectados con áreas abiertas.<ul><li><b>Sectores cerrados:</b> recepción, administración, habitaciones y pasillos, cocina, comedor de desayuno, bodega y lavandería.</li><li><b>Áreas abiertas:</b> portería, estacionamiento, parque, bosque y piscina.</li></ul>Cuando trabajas seguro, también cuidas a los huéspedes.' },
     { s: 'h_in_requisitos', t: 'Lo que todo trabajador debe cumplir',
-      x: 'Desde que entras al hotel y mientras estés en él:<ul><li>Mantén el <b>orden y la limpieza</b> en tu puesto y en las áreas que uses.</li><li>Usa <b>en todo momento</b> el EPP de tu función.</li><li>Respeta la señalización y <b>no tapes</b> pasillos, accesos, escaleras, salidas de emergencia ni extintores.</li><li>Deja los <b>residuos</b> en los lugares habilitados.</li><li>Cuida tu <b>higiene personal</b> durante la jornada.</li></ul>No cumplir es una <b>falta grave</b> a la seguridad y a la normativa interna del hotel.' },
+      x: 'Desde que entras al hotel y mientras estés en él:<ul><li>Mantén el <b>orden y la limpieza</b> en tu puesto y en las áreas que uses.</li><li>Usa <b>en todo momento</b> el EPP de tu función.</li><li>Respeta la señalización y <b>no tapes</b> pasillos, accesos, escaleras, salidas de emergencia ni extintores.</li><li>Deja los <b>residuos</b> en los lugares habilitados.</li><li>Mantén la <b>higiene</b> en tu trabajo: lávate las manos después de tocar basura o químicos y antes de comer, y usa tu ropa de trabajo limpia.</li></ul>No cumplir es una <b>falta grave</b> a la seguridad y a la normativa interna del hotel.' },
     { s: 'h_in_orden', t: 'Orden y limpieza, sin excepciones',
       x: 'El orden y la limpieza son <b>obligatorios</b>: vías de circulación despejadas y nada de basura acumulada. El desorden provoca <b>golpes y tropiezos</b>.<ul><li>No uses los pasillos como bodega.</li><li>Cada herramienta y material tiene su <b>lugar definido</b>: nunca en el borde de una repisa ni en una zona de paso.</li><li>Guarda en forma estable: lo pesado, abajo.</li><li>Señaliza lo que sobresale y puede golpear.</li></ul>' },
     { s: 'h_in_equipos', t: 'Máquinas y equipos del hotel',
@@ -644,12 +644,12 @@ window.SI_IND_TRANSV = {
 
   // ===================== ACTIVIDADES (cada una cuenta como una pregunta más) =====================
   window.HT_ACT = (window.HT_ACT || []).concat([
-    // A1 · ítems IRL: 1 y 7 (orden y limpieza), 3 (no obstruir el paso), 4 (residuos), 5 (higiene personal), 30 (caídas al mismo nivel), 32 y 44 (golpes y herramientas mal ubicadas)
+    // A1 · ítems IRL: 1 y 7 (orden y limpieza), 3 (no obstruir el paso), 4 (residuos), 5 (higiene: lavado de manos después de basura o químicos), 30 (caídas al mismo nivel), 32 y 44 (golpes y herramientas mal ubicadas)
     { tema: 'induccion', tipo: 'tarjetas', q: '🧩 Actividad: orden, limpieza y pisos. ¿Así sí o así no? Desliza cada tarjeta.', binario: true, cats: ['✅ Así sí', '❌ Así no'], sub: ['', ''],
       items: [['Dejar el carro de aseo en medio del pasillo', 1, 'h_in_c_carro'], ['Poner el letrero de piso mojado después de trapear', 0, 'h_in_c_mojado'],
         ['Mantener el pasillo de la bodega libre y ordenado', 0, 'h_in_c_pasillo'], ['Botar los residuos en los basureros habilitados', 0, 'h_in_c_residuos'],
-        ['Lavarse las manos antes de volver a la cocina', 0, 'h_in_c_manos'], ['Dejar un martillo en el borde de una repisa, sobre el pasillo', 1, 'h_in_c_borde']],
-      w: 'Así sí: pasillos libres, letrero de piso mojado, residuos en su lugar y manos limpias. Así no: carros en el paso ni herramientas en bordes, donde caen o golpean.' },
+        ['Lavarse las manos después de sacar la basura o usar productos químicos', 0, 'h_in_c_manos'], ['Dejar un martillo en el borde de una repisa, sobre el pasillo', 1, 'h_in_c_borde']],
+      w: 'Así sí: pasillos libres, letrero de piso mojado, residuos en su lugar y lavarse las manos después de tocar basura o químicos, para no llevarse gérmenes ni restos de producto a la boca, los ojos o la comida. Así no: carros en el paso ni herramientas en bordes, donde caen o golpean.' },
     // A2 · ítems IRL: 2 (EPP de la función), 5 (higiene: cofia), 33 (cortes: guante anticorte), 39 (sin joyas) y 30 (calzado antideslizante)
     { tema: 'induccion', tipo: 'vestir', q: '🧩 Actividad: prepara a la persona que va a picar verduras en la cocina.',
       items: [['Cofia', 1, 'cofia', { cofia: true }], ['Pechera', 1, 'pechera', { apron: '#E0E0E0', shirt: '#FFFFFF' }], ['Guante anticorte para picar', 1, 'guantes#90A4AE', { gloves: '#90A4AE' }],
