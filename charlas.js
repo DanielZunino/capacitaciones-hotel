@@ -186,9 +186,6 @@ window.SI_IND_TRANSV = {
     + hotel(44, 150, 190, q) + `<rect x="0" y="150" width="320" height="50" fill="#7CB342"/><path d="M124,150 L110,200 H168 L154,150Z" fill="#D7CCC8"/>`
     + W(96, 186, { area: 'recepcion', s: .8 }) + W(192, 186, { area: 'cocina', s: .8, flip: true, hair: true }) + W(226, 190, { area: 'mantencion', s: .8, flip: true })
     + (q ? '' : lab(160, 16, 'Mixto: interior y áreas verdes', '#2E7D32'))));
-  D('recinto', q => sv2(H.fondo.jardin() + hotel(20, 150, 150, true) + H.arbol(212, 150, 90) + H.arbol(290, 152, 70)    + `<rect x="190" y="168" width="120" height="26" rx="4" fill="#29B6F6" stroke="#fff" stroke-width="3"/>` + [0, 1].map(i => `<path d="M${200 + i * 50},${180} q8,-4 16,0 t16,0" stroke="#E1F5FE" stroke-width="2" fill="none" class="h_in_sl" style="--dx:10px"/>`).join('')
-    + W(176, 178, { area: 'mantencion', s: .85, flip: true })
-    + (q ? '' : lab(94, 40, 'Sectores cerrados', '#0E3962') + lab(250, 30, 'Áreas abiertas', '#2E7D32'))));
 
   // 2 · Requisitos generales (ítems 1 a 5)
   D('requisitos', q => {
@@ -197,9 +194,8 @@ window.SI_IND_TRANSV = {
     return sv2(g);
   });
   // 2b · solo prueba: carro de aseo tapando el extintor y la salida
-  S.h_in_obstruye_q = () => sv2(H.fondo.pasillo() + H.extintor(232, 120) + salida(226, 16) + carro(214, 172) + W(80, 176, { area: 'habitaciones', hair: true, pose: 'walk' }));
-  S.h_in_residuos_q = () => sv2(H.fondo.cocina() + basurero(170, 172, '#43A047') + basurero(210, 172, '#1E88E5') + basurero(250, 172, '#FDD835') + W(120, 176, { area: 'cocina', pose: 'carry' }) + `<path d="M132,124 h18 l-2,16 h-14z" fill="#455A64"/>` + `<path d="M40,170 l20,-6 l8,8 l-14,4z" fill="#A1887F"/><circle cx="74" cy="172" r="4" fill="#8BC34A"/>`);
-  S.h_in_higiene_q = () => sv2(H.fondo.bano() + lavamanos(150, 165) + W(120, 176, { area: 'cocina', hair: true, pose: 'carry' }) + GG('h_in_up', [0, 1, 2].map(i => `<circle cx="${146 + i * 6}" cy="${114 - i * 4}" r="3" fill="#fff" stroke="#81D4FA"/>`).join('')));
+  S.h_in_c_residuos = () => sv2(H.fondo.cocina() + basurero(170, 172, '#43A047') + basurero(210, 172, '#1E88E5') + basurero(250, 172, '#FDD835') + W(120, 176, { area: 'cocina', pose: 'carry' }) + `<path d="M132,124 h18 l-2,16 h-14z" fill="#455A64"/>` + `<path d="M40,170 l20,-6 l8,8 l-14,4z" fill="#A1887F"/><circle cx="74" cy="172" r="4" fill="#8BC34A"/>`);
+  S.h_in_c_manos = () => sv2(H.fondo.bano() + lavamanos(150, 165) + W(120, 176, { area: 'cocina', hair: true, pose: 'carry' }) + GG('h_in_up', [0, 1, 2].map(i => `<circle cx="${146 + i * 6}" cy="${114 - i * 4}" r="3" fill="#fff" stroke="#81D4FA"/>`).join('')));
 
   // 3 · Orden y limpieza / golpes / herramientas mal ubicadas (ítems 7, 32, 44)
   D('orden', q => {
@@ -227,7 +223,6 @@ window.SI_IND_TRANSV = {
     + termometro(296, 132, 26, '#43A047') + H.charco(120, 180, 30) + H.letreroMojado(170, 178, .9)
     + W(236, 178, { area: 'comedor' }) + `<rect x="246" y="124" width="26" height="4" fill="#ECEFF1" stroke="#90A4AE"/><circle cx="254" cy="120" r="5" fill="#fff" stroke="#90A4AE"/>`
     + (q ? '' : lab(70, 100, 'Ventilación', '#1565C0') + lab(160, 26, 'Buena luz', '#F9A825') + TT(296, 64, '18 a 26', 12, '#2E7D32') + TT(296, 78, 'grados', 11, '#2E7D32') + lab(110, 160, 'Piso mojado: señaliza', '#C62828'))));
-  S.h_in_luz_q = () => sv2(H.fondo.habitacion() + lampara(70) + `<g class="h_in_bl">${lampara(200)}</g>` + `<rect x="176" y="2" width="48" height="7" rx="3" fill="#9E9E9E" stroke="#757575"/>` + cama(40, 172) + W(210, 178, { area: 'habitaciones', hair: true, pose: 'stop', flip: true }));
 
   // 6 · Ley 16.744 (ítem 11)
   const escudo = (cx, cy, q) => `<path d="M${cx},${cy - 50} L${cx + 40},${cy - 36} V${cy} Q${cx + 40},${cy + 32} ${cx},${cy + 50} Q${cx - 40},${cy + 32} ${cx - 40},${cy} V${cy - 36}Z" fill="#0E3962" stroke="#D4A537" stroke-width="3"/>`
@@ -388,8 +383,6 @@ window.SI_IND_TRANSV = {
     + `<rect x="98" y="126" width="22" height="4" fill="#fff" stroke="#B0BEC5"/>`
     + (q ? '' : `<g transform="translate(266,46)"><circle r="20" fill="#fff" stroke="#D7262B" stroke-width="3.5"/><circle cx="-4" cy="4" r="7" fill="none" stroke="#FBC02D" stroke-width="3"/><circle cx="6" cy="-3" r="5" fill="none" stroke="#AB47BC" stroke-width="3"/><line x1="-14" y1="-14" x2="14" y2="14" stroke="#D7262B" stroke-width="3.5"/></g>`
       + lab(266, 82, 'Sin anillos ni pulseras', '#C62828') + lab(110, 26, 'Manos lejos de los rodillos', '#C62828') + lab(176, 190, 'Equipo detenido para limpiar', '#2E7D32'))));
-  S.h_in_joyas_q = () => sv2(H.fondo.lavanderia() + lavadora(150, 168, true) + lavadora(220, 168, false, '#E3F2FD')
-    + W(116, 178, { area: 'lavanderia', hair: true, pose: 'carry', loose: true }) + `<circle cx="132" cy="128" r="3.5" fill="none" stroke="#FBC02D" stroke-width="2"/>`);
 
   // 27 · Riesgo eléctrico (ítem 40)
   D('electrico', q => sv2(H.fondo.lavanderia() + tablero(30, 52, false) + W(110, 178, { area: 'mantencion', pose: 'point' })
@@ -409,8 +402,6 @@ window.SI_IND_TRANSV = {
     + `<rect x="232" y="140" width="56" height="60" fill="#78909C"/>${[0, 1, 2, 3, 4].map(i => `<rect x="${236 + i * 11}" y="142" width="6" height="58" fill="#fff" opacity=".9"/>`).join('')}`
     + GG('h_in_sl', auto(18, 186, '#0E3962', .9), '--dx:24px') + (q ? W(190, 150, { area: 'recepcion', pose: 'walk', s: .8, flip: true }) : W(260, 196, { area: 'recepcion', pose: 'walk', s: .9, flip: true }))
     + (q ? '' : `<circle cx="210" cy="40" r="18" fill="#fff" stroke="#D7262B" stroke-width="4"/>` + TT(210, 45, '10', 14) + lab(104, 20, 'Velocidad señalizada', '#C62828') + lab(262, 100, 'Cruce peatonal', '#2E7D32') + lab(90, 104, 'Cinturón y sin celular', '#0E3962'))));
-  S.h_in_conducir_q = () => sv2(H.fondo.jardin('#9E9E9E') + `<rect x="0" y="146" width="320" height="54" fill="#78909C"/>` + auto(70, 186, '#0E3962', 1.1)
-    + `<circle cx="168" cy="129" r="7" fill="#F2C6A0" stroke="#22303A"/><path d="M160,140 q8,-5 16,0" stroke="#1F4E79" stroke-width="5" fill="none"/>` + H.arbol(290, 146, 80) + H.arbol(30, 146, 70));
 
   // 30 · Accidente de trayecto (ítem 45)
   D('trayecto', q => sv2(H.fondo.jardin() + casa(10, 150) + hotel(206, 150, 110, true) + `<rect x="0" y="150" width="320" height="18" fill="#9E9E9E"/>`
@@ -445,7 +436,6 @@ window.SI_IND_TRANSV = {
   S.h_in_guante_q = () => sv2(H.fondo.bano() + carro(30, 172) + W(150, 178, { area: 'habitaciones', hair: true, pose: 'carry', gloves: '#FDD835', face: 'worried' }) + `<g transform="translate(250,120) scale(1.8)">${guante(0, 0, '#FDD835', true)}</g>`);
   S.h_in_c_levanta = () => sv2(H.fondo.bodega() + W(150, 178, { area: 'bodega', pose: 'squat' }) + caja(160, 176, 34, 24));
 
-  S.h_in_epp2_q = () => sv2(H.fondo.bano() + `<rect x="196" y="120" width="90" height="45" rx="4" fill="#ECEFF1" stroke="#90A4AE"/><rect x="200" y="112" width="82" height="10" rx="4" fill="#fff" stroke="#90A4AE"/>` + H.bidon(40, 165, '#1E88E5', 'CLORO') + W(150, 178, { area: 'habitaciones', hair: true, pose: 'carry' }));
 
   // ===================== LÁMINAS =====================
   const PUESTO_X = 'La empresa debe informarte los <b>riesgos de tu puesto</b>, sus <b>consecuencias</b> y las <b>medidas</b> para controlarlos. Lo hace al ingresar y cada vez que cambie tu puesto o tus tareas. Los principales en el hotel:<ul>'
@@ -519,63 +509,56 @@ window.SI_IND_TRANSV = {
       x: 'Junto con esta inducción recibes los <b>procedimientos de trabajo seguro</b> del hotel: <b>Tránsito peatonal</b>, <b>Trabajos en cocina</b>, <b>Trabajos en altura</b>, <b>Plan de emergencia</b> y <b>Uso seguro de teléfonos móviles</b> (el celular se usa en un lugar seguro, con autorización y sin descuidar la tarea). También recibes el <b>Reglamento Interno de Orden, Higiene y Seguridad</b>. Léelos y cúmplelos; si tienes dudas, pregunta a tu jefatura.<div class="indlinks" data-ind="links"></div>' }
   ];
 
-  // ===================== EVALUACIÓN: una pregunta por cada ítem de la inducción escrita =====================
+  // ===================== DIBUJOS DE LAS TARJETAS DE LAS ACTIVIDADES =====================
+  const martillo = (x, y, rot = 0) => `<g transform="rotate(${rot} ${x} ${y})"><rect x="${x}" y="${y - 3}" width="30" height="6" rx="2" fill="#8D6E63" stroke="#5D4037"/><rect x="${x + 26}" y="${y - 9}" width="9" height="18" rx="2" fill="#607D8B" stroke="#37474F"/></g>`;
+  const cortapasto = (x, y) => `<rect x="${x}" y="${y - 20}" width="48" height="12" rx="5" fill="#2E7D32" stroke="#1B5E20" stroke-width="1.5"/><rect x="${x + 14}" y="${y - 30}" width="20" height="11" rx="3" fill="#455A64"/><rect x="${x + 18}" y="${y - 34}" width="8" height="5" fill="#D32F2F"/>`
+    + `<circle cx="${x + 8}" cy="${y - 6}" r="6" fill="#263238"/><circle cx="${x + 40}" cy="${y - 6}" r="6" fill="#263238"/><circle cx="${x + 8}" cy="${y - 6}" r="2" fill="#B0BEC5"/><circle cx="${x + 40}" cy="${y - 6}" r="2" fill="#B0BEC5"/>`
+    + GG('h_in_sl', `<path d="M${x + 50},${y - 4} l6,-4 M${x + 52},${y - 1} l7,-1 M${x + 50},${y - 10} l5,-6" stroke="#7CB342" stroke-width="2" stroke-linecap="round"/>`, '--dx:6px');
+  const humo = (x, y, c = '#9E9E9E') => [0, 1, 2].map(i => GG('h_in_up', `<path d="M${x},${y} q-4,-6 0,-12 q4,-6 0,-12" stroke="${c}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`, `animation-delay:${i * .7}s`)).join('');
+  // A1 · requisitos generales y orden
+  S.h_in_c_borde = () => sv2(H.fondo.bodega() + estante(150, 165, 90, 110) + caja(156, 159, 30, 20) + caja(188, 125, 30, 20)
+    + `<g class="h_in_sw" style="transform-origin:206px 92px">${martillo(206, 88, 8)}</g>` + `<rect x="232" y="78" width="26" height="10" rx="2" fill="#FFB300" stroke="#E65100" transform="rotate(-6 245 83)"/>`
+    + W(120, 178, { area: 'mantencion', pose: 'walk', anim: 'h_in_bob' }));
+  // A3 · máquinas, cargas, químicos, electricidad y altura
+  S.h_in_c_capacita = () => sv2(H.fondo.lavanderia() + planchadora(150, 168, 130) + W(82, 178, Object.assign({ pose: 'point' }, jefe)) + W(126, 178, { area: 'lavanderia', hair: true, flip: true })
+    + papel(20, 40, 46, 56, '', '#00897B'));
+  S.h_in_c_cable = () => sv2(H.fondo.lavanderia() + `<rect x="150" y="152" width="70" height="14" rx="3" fill="#fff" stroke="#546E7A" stroke-width="1.5"/>${[0, 1, 2, 3, 4].map(i => `<rect x="${154 + i * 13}" y="155" width="9" height="8" fill="#263238"/>`).join('')}`
+    + [0, 1, 2, 3, 4].map(i => `<path d="M${158 + i * 13},152 q${6 + i * 3},-40 ${96 - i * 10},-${46 - i * 4}" stroke="#263238" stroke-width="2.5" fill="none"/>`).join('')
+    + `<rect x="232" y="128" width="16" height="5" fill="#B87333"/>` + GG('h_in_bl', rayo(244, 112, 1)) + lavadora(250, 168, true, '#E3F2FD')
+    + W(96, 178, { area: 'lavanderia', hair: true, pose: 'point' }));
+  S.h_in_c_silla = () => sv2(H.fondo.habitacion() + `<rect x="138" y="2" width="48" height="7" rx="3" fill="#9E9E9E" stroke="#757575"/>` + silla(130, 172) + W(150, 142, { area: 'habitaciones', hair: true, pose: 'stop', face: 'worried' }) + cama(10, 172, 90));
+  // A4 · salud y ambiente
+  S.h_in_c_barrer = () => sv2(H.fondo.bodega() + lena(200, 168, 3) + W(130, 178, { area: 'mantencion', pose: 'bend' }) + `<line x1="168" y1="140" x2="178" y2="176" stroke="#8D6E63" stroke-width="4"/><path d="M168,172 h22 l6,10 h-34z" fill="#FFCA28" stroke="#F9A825"/>`
+    + GG('h_in_up', `<ellipse cx="196" cy="168" rx="26" ry="10" fill="#BCAAA4" opacity=".7"/><ellipse cx="176" cy="150" rx="18" ry="8" fill="#BCAAA4" opacity=".55"/>`) + raton(296, 186));
+  S.h_in_c_agua = () => sv2(H.fondo.jardin() + sol(40, 36) + H.arbol(190, 156, 130) + `<ellipse cx="190" cy="176" rx="60" ry="7" fill="#000" opacity=".12"/>` + W(180, 176, { area: 'mantencion', pose: 'carry' })
+    + `<rect x="192" y="104" width="9" height="22" rx="3" fill="#4FC3F7" stroke="#0277BD" transform="rotate(-40 196 115)"/>`);
+  S.h_in_c_bloq = () => sv2(H.fondo.jardin() + sol(44, 38, 20) + H.arbol(286, 150, 80) + W(160, 184, { area: 'mantencion', pose: 'carry' })
+    + `<path d="M149.5,108 a10.5,10.5 0 0 1 21,0z" fill="#F1E3C2" stroke="#22303A"/><path d="M148,108 h25 q4,0 6,3 h-31z" fill="#F1E3C2" stroke="#22303A"/>`
+    + `<g class="h_in_sw" style="transform-origin:176px 134px"><rect x="172" y="112" width="12" height="24" rx="3" fill="#FF8F00" stroke="#E65100"/><rect x="174" y="106" width="8" height="7" fill="#fff" stroke="#E65100"/></g>`);
+  S.h_in_c_fonos = () => sv2(H.fondo.jardin() + H.arbol(40, 150, 90) + H.arbol(296, 148, 70) + W(140, 186, { area: 'mantencion', pose: 'carry', muffs: 'neck', gloves: '#5D4037' })
+    + `<line x1="156" y1="136" x2="168" y2="166" stroke="#455A64" stroke-width="3.5" stroke-linecap="round"/>` + cortapasto(160, 186) + GG('h_in_bl', waves(214, 150, 3, '#E53935')));
+  S.h_in_c_pausa = () => sv2(H.fondo.oficina() + escritorio(190, 165, 110) + W(100, 178, { area: 'recepcion', pose: 'stop', anim: 'h_in_bob' }) + W(150, 178, { area: 'cocina', hair: true, pose: 'stop', flip: true, anim: 'h_in_bob' }));
+  S.h_in_c_luz = () => sv2(H.fondo.comedor() + lampara(80) + `<g class="h_in_bl">${lampara(210)}</g>` + `<rect x="186" y="2" width="48" height="7" rx="3" fill="#9E9E9E" stroke="#757575"/>`
+    + W(196, 178, { area: 'comedor', pose: 'stop', flip: true }) + tel(176, 86));
+  // A5 · parque, accesos, tránsito y emergencias
+  S.h_in_c_cruce = () => sv2(H.fondo.jardin('#9E9E9E') + H.arbol(296, 140, 70) + `<rect x="0" y="140" width="320" height="60" fill="#78909C"/><rect x="150" y="140" width="64" height="60" fill="#78909C"/>${[0, 1, 2, 3, 4].map(i => `<rect x="${154 + i * 12}" y="142" width="7" height="58" fill="#fff" opacity=".9"/>`).join('')}`
+    + auto(-8, 190, '#0E3962', .8) + W(182, 182, { area: 'bodega', pose: 'walk', anim: 'h_in_bob' }));
+  S.h_in_c_celauto = () => sv2(H.fondo.jardin('#9E9E9E') + `<rect x="0" y="146" width="320" height="54" fill="#78909C"/>` + H.arbol(290, 146, 80) + H.arbol(30, 146, 70)
+    + GG('h_in_sl', auto(60, 186, '#0E3962', 1.1) + `<circle cx="158" cy="129" r="7" fill="#F2C6A0" stroke="#22303A"/><path d="M150,140 q8,-5 16,0" stroke="#1F4E79" stroke-width="5" fill="none"/><rect x="164" y="122" width="7" height="12" rx="1.5" fill="#263238"/><rect x="165" y="124" width="5" height="7" fill="#80DEEA"/>`, '--dx:16px'));
+  S.h_in_c_bici = () => sv2(H.fondo.jardin() + casa(14, 150) + H.arbol(290, 150, 80) + `<rect x="0" y="150" width="320" height="18" fill="#9E9E9E"/>`
+    + GG('h_in_sl', bici(126, 186) + W(150, 168, { area: 'general', helmet: '#1E88E5', pose: 'squat' }) + `<circle cx="180" cy="142" r="3.5" fill="#FFF59D" stroke="#F9A825"/><circle cx="124" cy="150" r="3" fill="#E53935"/>`, '--dx:22px'));
+  S.h_in_c_fumar = () => sv2(H.fondo.caldera() + caldera(220, 165) + lena(120, 172, 3) + W(80, 178, { area: 'mantencion', pose: 'carry' })
+    + `<rect x="94" y="126" width="12" height="3" fill="#fff"/><rect x="104" y="126" width="3" height="3" fill="#FF7043"/>` + humo(106, 122));
+  S.h_in_c_bencina = () => sv2(H.fondo.caldera() + caldera(200, 165) + H.bidon(160, 165, '#D32F2F', 'BENCINA', .9) + W(116, 178, { area: 'mantencion', pose: 'carry' }));
+  S.h_in_c_orilla = () => sv2(H.fondo.jardin() + H.arbol(40, 148, 90) + H.arbol(300, 148, 80) + W(140, 184, { area: 'mantencion', glasses: true, muffs: 'on', gloves: '#5D4037', pose: 'lift2' })
+    + `<path d="M137,103 h14 v16 q-7,4 -14,0z" fill="#B3E5FC" fill-opacity=".55" stroke="#0277BD"/>` + orilladora(148, 136, 204, 180) + piedras(214, 178));
+
+  S.h_in_agentes_q = () => sv2(H.fondo.jardin() + sol(40, 36) + termometro(92, 74, 40) + H.arbol(296, 148, 80) + W(160, 186, { area: 'mantencion', pose: 'carry', gloves: '#5D4037' })
+    + `<line x1="176" y1="136" x2="188" y2="166" stroke="#455A64" stroke-width="3.5" stroke-linecap="round"/>` + cortapasto(180, 186) + GG('h_in_bl', waves(234, 150, 3, '#E53935')));
+  // ===================== EVALUACIÓN: 15 preguntas + 5 actividades = 20 =====================
+  // Regla de Daniel: ningún ítem de la inducción escrita queda sin evaluar. Las 3 versiones de una pregunta se reparten entre los ítems que cubre.
+  // Los ítems 6 (tipo de recinto) y 10 (presentación de la empresa) quedan solo en su lámina (Daniel, 06-11-2026).
   const quiz = [
-    // ítems IRL: 10 (presentación de la empresa)
-    { s: 'h_in_empresa_q', v: [
-      { q: '¿Qué hay en el hotel en todo momento, y debes considerar al trabajar?', o: ['Huéspedes, que también deben quedar protegidos', 'Solo trabajadores, sin público', 'Huéspedes solo durante el verano', 'Huéspedes solo los fines de semana'], w: 'En el hotel siempre hay huéspedes: tu forma de trabajar también los protege a ellos.' },
-      { q: '¿Cuál de estas áreas forma parte del Hotel Salto del Laja?', o: ['Lavandería con lavadoras y secadoras industriales', 'Una fábrica de muebles', 'Un taller de camiones', 'Un packing de fruta'], w: 'El hotel tiene recepción, habitaciones, cocina, comedor, bodega, lavandería, áreas verdes y piscina.' },
-      { q: 'En el hotel hay huéspedes en todo momento; por eso, trabajar seguro también los protege a ellos.', vf: true, w: 'Verdadero. Un carro en el paso, un piso mojado o un cable suelto también pueden lesionar a un huésped.' }] },
-    // ítems IRL: 6 (tipo y dimensión del recinto)
-    { s: 'h_in_recinto_q', v: [
-      { q: '¿Qué tipo de recinto es el hotel?', o: ['Mixto: sectores cerrados conectados con áreas abiertas', 'Cerrado: todo el trabajo es bajo techo', 'Abierto: todo el trabajo es al aire libre', 'Subterráneo, sin luz natural'], w: 'El hotel es un recinto mixto y mediano: sectores cerrados conectados con áreas abiertas.' },
-      { q: '¿Cuál de estos es un sector abierto del hotel?', o: ['El parque y la piscina', 'La lavandería', 'La bodega', 'La cocina'], w: 'El parque, el bosque, la piscina, la portería y el estacionamiento son áreas abiertas.' },
-      { q: 'El hotel es un recinto solo cerrado, por eso nadie trabaja al aire libre.', vf: false, w: 'Falso. Es un recinto mixto: hay trabajo en el parque, la piscina, la portería y el estacionamiento.' }] },
-    // ítems IRL: 1 (orden y limpieza en el puesto) y 7 (estado de orden y limpieza del lugar)
-    { s: 'h_in_requisitos_q', v: [
-      { q: '¿Cómo deben estar las vías de circulación del hotel?', o: ['Despejadas y sin desechos acumulados', 'Libres solo cuando hay huéspedes', 'Con cajas, si es solo por un rato', 'Despejadas solo al terminar el turno'], w: 'El orden y la limpieza son obligatorios siempre: vías despejadas y sin desechos acumulados.' },
-      { q: 'Terminas de usar un balde y un trapero en el pasillo. ¿Qué haces?', o: ['Los guardo de inmediato en su lugar', 'Los dejo junto a la pared para después', 'Los dejo en la escalera, que casi no se usa', 'Los dejo hasta el aseo del final del día'], w: 'Lo que usas vuelve a su lugar de inmediato: así nadie tropieza.' },
-      { q: 'El orden y la limpieza son obligatorios siempre, en tu puesto y en las áreas que usas.', vf: true, w: 'Verdadero. Es obligatorio, sin excepciones.' }] },
-    // ítems IRL: 2 (usar en todo momento los EPP de la función)
-    { s: 'h_in_epp2_q', v: [
-      { q: '¿Durante cuánto tiempo debes usar el EPP de tu función?', o: ['Todo el tiempo que estoy expuesto al riesgo', 'Solo cuando la jefatura está presente', 'Solo durante la primera hora del turno', 'Solo cuando la tarea es larga'], w: 'El EPP protege solo si está puesto todo el tiempo de exposición.' },
-      { q: 'Vas a limpiar un baño con cloro por solo cinco minutos. ¿Qué haces con el EPP?', o: ['Me pongo igual los guantes y lo que indica la HDS', 'No lo uso, la tarea es muy corta', 'Me pongo solo un guante', 'Lo uso solo si hay huéspedes cerca'], w: 'Un accidente ocurre en segundos: el EPP se usa aunque la tarea sea corta.' },
-      { q: 'Si la tarea dura poco, se puede hacer sin el EPP.', vf: false, w: 'Falso. El EPP se usa en todo momento mientras estés expuesto, aunque la tarea sea corta.' }] },
-    // ítems IRL: 3 (señalización; no obstruir pasillos, accesos, escaleras, salidas ni equipos de emergencia)
-    { s: 'h_in_obstruye_q', v: [
-      { q: 'Necesitas dejar el carro de aseo un momento. ¿Dónde lo dejas?', o: ['A un costado, sin tapar el paso, la salida ni el extintor', 'Frente al extintor, que casi no se usa', 'En el descanso de la escalera', 'Delante de la salida de emergencia'], w: 'Pasillos, escaleras, salidas y equipos de emergencia nunca se obstruyen, ni por un rato.' },
-      { q: '¿Qué NO puedes tapar nunca, ni por un momento?', o: ['Las salidas de emergencia, escaleras y extintores', 'Un rincón vacío de tu bodega', 'La pared de un pasillo ancho', 'Un estante de tu propia área'], w: 'En una emergencia cada segundo cuenta: salidas, escaleras y extintores siempre libres.' },
-      { q: 'Se puede dejar una caja frente a una salida de emergencia si es solo por unos minutos.', vf: false, w: 'Falso. Una emergencia no avisa: la salida debe estar libre siempre.' }] },
-    // ítems IRL: 4 (disponer los residuos en los lugares habilitados)
-    { s: 'h_in_residuos_q', v: [
-      { q: '¿Dónde dejas los residuos de tu trabajo?', o: ['En los lugares habilitados para eso', 'En cualquier rincón, después se limpia', 'En una bolsa en el pasillo', 'Junto a la puerta de la bodega'], w: 'Los residuos van en los lugares habilitados.' },
-      { q: 'Se acumuló basura detrás de la bodega. ¿Por qué es un problema?', o: ['Atrae roedores y puede causar un incendio', 'Solo porque se ve feo ante los huéspedes', 'No es problema si está en bolsas', 'Solo es problema en verano'], w: 'La basura acumulada atrae ratones (hantavirus) y es combustible para un incendio.' },
-      { q: 'Los residuos se dejan en los lugares habilitados y la basura no se acumula.', vf: true, w: 'Verdadero. Así se evitan roedores, incendios y tropiezos.' }] },
-    // ítems IRL: 5 (higiene personal) y la falta grave por incumplir los requisitos generales
-    { s: 'h_in_higiene_q', v: [
-      { q: '¿Qué dice la inducción sobre tu higiene personal?', o: ['Debo mantenerla en buenas condiciones durante la jornada', 'Es un tema solo de cada persona, no del trabajo', 'Solo importa en la cocina', 'Solo importa al inicio del turno'], w: 'La higiene personal es un requisito para todos durante toda la jornada.' },
-      { q: '¿Qué es no cumplir los requisitos generales de orden, EPP, señalización, residuos e higiene?', o: ['Una falta grave a la seguridad y a la normativa interna', 'Nada, son solo recomendaciones', 'Algo que solo importa si hay un accidente', 'Una falta solo si lo ve un huésped'], w: 'El incumplimiento se considera falta grave a la seguridad, la higiene y la normativa interna del hotel.' },
-      { q: 'No cumplir los requisitos generales de seguridad del hotel se considera una falta grave.', vf: true, w: 'Verdadero. Así lo establece la inducción del hotel.' }] },
-    // ítems IRL: 32 (golpes con o contra) y 44 (golpeado por estructuras o herramientas mal ubicadas)
-    { s: 'h_in_orden_q', v: [
-      { q: '¿Dónde dejas las herramientas cuando no las usas?', o: ['En su lugar definido', 'En el borde de una repisa', 'En el piso del pasillo', 'Sobre un peldaño de la escala'], w: 'Cada herramienta tiene un lugar definido. En bordes o zonas de paso, cae o hace tropezar.' },
-      { q: 'Una tabla sobresale de un estante en el pasillo de la bodega. ¿Qué haces?', o: ['La ordeno o la señalizo, y aviso', 'Paso agachado y sigo', 'La dejo, todos ya la conocen', 'La empujo un poco y sigo'], w: 'Lo que sobresale se ordena o se señaliza: así nadie se golpea.' },
-      { q: 'Usar los pasillos como bodega provoca golpes y tropiezos.', vf: true, w: 'Verdadero. Los pasillos no son bodega.' }] },
-    // ítems IRL: 8 (máquinas, equipos y herramientas del puesto)
-    { s: 'h_in_equipos_q', v: [
-      { q: 'Te piden usar la planchadora, pero nunca te enseñaron. ¿Qué haces?', o: ['No la uso hasta que me capaciten y autoricen', 'La uso con cuidado, mirando a otro', 'La uso solo un rato', 'La uso si no hay nadie más'], w: 'Ningún equipo se usa sin capacitación y autorización.' },
-      { q: 'Una lavadora industrial hace un ruido raro y huele a quemado. ¿Qué haces?', o: ['La dejo de usar y aviso de inmediato', 'Termino la carga y después aviso', 'La abro para ver qué tiene', 'Le saco un poco de ropa y sigo'], w: 'Un equipo con falla no se usa: se detiene y se avisa.' },
-      { q: 'Cualquier trabajador puede usar los equipos de cocina o de lavandería, aunque no lo hayan capacitado.', vf: false, w: 'Falso. Solo los usa quien fue capacitado y autorizado.' }] },
-    // ítems IRL: 9 (condiciones ambientales: ventilación, temperatura, humedad, ruido)
-    { s: 'h_in_ambiente_q', v: [
-      { q: '¿Qué temperatura se considera confortable para trabajar?', o: ['Entre 18 y 26 grados', 'Entre 5 y 12 grados', 'Entre 28 y 35 grados', 'Cualquiera, si se usa EPP'], w: 'La temperatura confortable es entre 18 y 26 grados.' },
-      { q: '¿Qué riesgo del ambiente hay al entrar y salir seguido de una cámara de frío?', o: ['Los cambios bruscos de temperatura', 'El exceso de luz', 'La radiación del sol', 'El polvo de la leña'], w: 'Los cambios bruscos de temperatura afectan la salud: abrígate y evita salir y entrar sin protección.' },
-      { q: 'En las áreas húmedas, el agua en el piso se seca o se señaliza, y el piso debe ser antideslizante.', vf: true, w: 'Verdadero. Así se evitan los resbalones.' }] },
-    // ítems IRL: 27 (protocolo de iluminación)
-    { s: 'h_in_luz_q', v: [
-      { q: 'Una luz de tu área de trabajo parpadea. ¿Qué haces?', o: ['Aviso a mi jefatura para que la reparen', 'Sigo trabajando con poca luz', 'La cambio subido a una silla', 'Uso la linterna del celular todo el turno'], w: 'Una luz con falla se avisa; no se trabaja con poca luz ni se improvisa.' },
-      { q: '¿Para qué se hizo un estudio de iluminación en los puestos del hotel?', o: ['Para que cada puesto tenga la luz adecuada', 'Solo para ahorrar electricidad', 'Para decorar los pasillos', 'Para fijar los horarios de trabajo'], w: 'El estudio verifica que cada puesto tenga la luz necesaria.' },
-      { q: 'La poca luz aumenta la fatiga de la vista, los errores y los accidentes.', vf: true, w: 'Verdadero. Por eso se cuida la iluminación de cada puesto.' }] },
     // ítems IRL: 11 (cobertura de la Ley 16.744)
     { s: 'h_in_ley_q', v: [
       { q: '¿Qué cubre el seguro de la Ley 16.744?', o: ['Accidentes del trabajo, de trayecto y enfermedades profesionales', 'Solo los accidentes graves', 'Solo las enfermedades comunes', 'Solo los accidentes dentro de la cocina'], w: 'La Ley 16.744 cubre accidentes del trabajo, de trayecto y enfermedades profesionales.' },
@@ -591,26 +574,26 @@ window.SI_IND_TRANSV = {
       { q: '¿Cuál de estos es un accidente grave?', o: ['Una caída de más de 1,8 metros de altura', 'Un corte pequeño en un dedo', 'Un golpe leve en el brazo', 'Un tropiezo sin lesión'], w: 'Una caída de más de 1,8 metros se considera accidente grave.' },
       { q: 'Ocurre un accidente grave en el parque. ¿Qué se hace en el lugar?', o: ['Se paraliza el trabajo y se delimita el área', 'Se sigue trabajando con cuidado', 'Se limpia el lugar de inmediato', 'Se retiran las herramientas para ordenar'], w: 'Se paralizan los trabajos en el área y se delimita, para no alterar el lugar ni exponer a otros.' },
       { q: 'Es accidente grave el que obliga a hacer maniobras de rescate o de reanimación.', vf: true, w: 'Verdadero. También la amputación y la caída de más de 1,8 metros.' }] },
-    // ítems IRL: 14 (Política de Prevención de Riesgos y SST)
+    // ítems IRL: 14 (Política de Prevención de Riesgos y SST) y 26 (protocolo de riesgos psicosociales)
     { s: 'h_in_politica_q', v: [
-      { q: '¿Qué busca la Política de Seguridad y Salud en el Trabajo del hotel?', o: ['Prevenir accidentes y enfermedades con la participación de todos', 'Solo cumplir con los papeles', 'Solo castigar a quien se accidente', 'Solo proteger los equipos del hotel'], w: 'La política busca prevenir accidentes y enfermedades, con la participación de todos.' },
-      { q: '¿Quiénes son responsables de la prevención en el hotel?', o: ['Todos: la empresa y cada trabajador', 'Solo el prevencionista', 'Solo las jefaturas', 'Solo el Comité Paritario'], w: 'La seguridad es tarea de todos. Tú eres el primer responsable de tu seguridad.' },
+      { q: '¿Quiénes son responsables de la prevención en el hotel, según su política?', o: ['Todos: la empresa y cada trabajador', 'Solo el prevencionista', 'Solo las jefaturas', 'Solo el Comité Paritario'], w: 'La política de seguridad y salud en el trabajo se cumple con la participación de todos.' },
+      { q: '¿Con qué cuestionario se evalúan los riesgos psicosociales del trabajo?', o: ['CEAL-SM', 'HDS', 'PREXOR', 'TMERT'], w: 'El CEAL-SM evalúa los riesgos psicosociales; es anónimo y sus resultados se usan para planes de acción.' },
       { q: 'La prevención hace perder tiempo, por eso a veces conviene saltarse algunas normas.', vf: false, w: 'Falso. La prevención es parte de hacer bien el trabajo.' }] },
-    // ítems IRL: 15 (uso y cuidado de los EPP: sin costo, certificados, reposición)
+    // ítems IRL: 15 (uso y cuidado de los EPP) y 2 (usar en todo momento los EPP de la función)
     { s: 'h_in_guante_q', v: [
-      { q: 'Tus guantes de goma se rompieron. ¿Qué haces?', o: ['Los devuelvo y pido la reposición', 'Sigo usándolos, aún sirven', 'Los parcho con cinta', 'Trabajo sin guantes hasta mañana'], w: 'Un EPP dañado no protege: se devuelve y se pide otro.' },
-      { q: '¿Cuánto debes pagar por tus EPP?', o: ['Nada, se entregan sin costo', 'La mitad de su valor', 'Se descuentan del sueldo', 'Una parte cada vez que se reponen'], w: 'Los EPP se entregan sin costo para el trabajador.' },
-      { q: 'Los EPP que se entregan deben estar certificados y su entrega queda registrada.', vf: true, w: 'Verdadero. Se entregan certificados y con registro de entrega.' }] },
-    // ítems IRL: 16 (uso de extintores PQS y CO2)
+      { q: 'Tus guantes de goma se rompieron. ¿Qué haces?', o: ['Los devuelvo y pido la reposición', 'Sigo usándolos, aún sirven', 'Los parcho con cinta', 'Trabajo sin guantes hasta mañana'], w: 'Un EPP dañado no protege: se devuelve y se pide otro, sin costo.' },
+      { q: '¿Cuánto debes pagar por tus EPP?', o: ['Nada, se entregan sin costo', 'La mitad de su valor', 'Se descuentan del sueldo', 'Una parte cada vez que se reponen'], w: 'Los EPP se entregan sin costo, certificados y con registro de entrega.' },
+      { q: 'Si la tarea dura poco, se puede hacer sin el EPP.', vf: false, w: 'Falso. El EPP se usa en todo momento mientras estés expuesto, aunque la tarea sea corta.' }] },
+    // ítems IRL: 16 (uso de extintores PQS y CO2) y 41 (incendios)
     { s: 'h_in_extintor_q', v: [
       { q: '¿Cuál es el orden correcto para usar un extintor?', o: ['Quitar el seguro, apuntar a la base y descargar en barrido', 'Apuntar a las llamas de arriba y descargar de una vez', 'Descargar primero y quitar el seguro al final', 'Agitarlo y apuntar al humo, desde lejos'], w: 'Seguro, base del fuego y barrido de lado a lado.' },
-      { q: 'Se prende fuego un equipo eléctrico enchufado. ¿Qué es lo indicado?', o: ['El extintor de CO2', 'Un balde con agua', 'Una toalla mojada encima', 'Soplar las llamas'], w: 'El CO2 es para fuegos eléctricos y equipos energizados. El agua conduce la electricidad.' },
-      { q: 'El extintor de polvo químico seco (PQS) sirve para fuegos de sólidos, líquidos y gases inflamables.', vf: true, w: 'Verdadero. El CO2 se usa en fuegos eléctricos.' }] },
-    // ítems IRL: 17 (señalización, zonas de tránsito peatonal, zona para fumar y zonas de seguridad)
+      { q: 'Se prende fuego un equipo eléctrico enchufado. ¿Qué extintor es el indicado?', o: ['El de CO2', 'Un balde con agua', 'Una toalla mojada encima', 'Ninguno, se sopla'], w: 'El CO2 es para fuegos eléctricos y equipos energizados. El agua conduce la electricidad.' },
+      { q: 'Para prevenir incendios, las vías de evacuación deben estar siempre libres y los extintores operativos y a la vista.', vf: true, w: 'Verdadero. También se guardan bien los inflamables y no se sobrecargan los enchufes.' }] },
+    // ítems IRL: 17 (señalización, zona de seguridad y zona para fumar) y 3 (no obstruir salidas ni equipos de emergencia)
     { s: 'h_in_senal_q', v: [
       { q: '¿Dónde está la zona de seguridad del hotel?', o: ['En el frontis de la instalación', 'En la bodega', 'En la sala de calderas', 'En el comedor de desayuno'], w: 'La zona de seguridad está en el frontis del hotel.' },
       { q: '¿Dónde se puede fumar en el hotel?', o: ['Solo en la zona habilitada', 'En cualquier lugar al aire libre', 'En la bodega, si está ventilada', 'Junto a la leña de las calderas'], w: 'Se fuma solo en la zona habilitada.' },
-      { q: 'Las zonas de tránsito peatonal se usan y se mantienen libres de objetos.', vf: true, w: 'Verdadero. Así se evitan atropellos y tropiezos.' }] },
+      { q: 'Se puede dejar una caja frente a una salida de emergencia si es solo por unos minutos.', vf: false, w: 'Falso. Pasillos, escaleras, salidas y extintores nunca se obstruyen, ni por un rato.' }] },
     // ítems IRL: 18 (Ley 20.949, peso máximo) y 29 (manejo manual de carga)
     { s: 'h_in_carga_q', v: [
       { q: 'Según la ley, ¿cuál es el peso máximo que un hombre adulto puede cargar sin ayuda mecánica?', o: ['25 kilos', '50 kilos', '35 kilos', '15 kilos'], w: 'Ley 20.949: 25 kilos los hombres y 20 kilos las mujeres y los menores de 18 años.' },
@@ -626,123 +609,72 @@ window.SI_IND_TRANSV = {
       { q: '¿Dónde encuentras el EPP y los primeros auxilios de un producto químico?', o: ['En su Hoja de Datos de Seguridad (HDS)', 'En la boleta de compra', 'En el Reglamento Interno', 'En el envase de otro producto'], w: 'La HDS indica los riesgos, el EPP, los primeros auxilios y cómo controlar un derrame.' },
       { q: 'Para limpiar más rápido, una compañera quiere mezclar cloro con otro limpiador. ¿Qué haces?', o: ['Le digo que no, porque libera gases tóxicos', 'La ayudo a mezclarlos', 'Los mezclo yo con agua caliente', 'Los mezclo en una botella de bebida'], w: 'Nunca se mezclan productos: el cloro con otros limpiadores libera gases tóxicos.' },
       { q: 'Un producto químico se puede guardar en una botella de bebida si se le escribe el nombre.', vf: false, w: 'Falso. Alguien la puede confundir y tomarla. Cada producto va en su envase original rotulado.' }] },
-    // ítems IRL: 21 (altas temperaturas)
-    { s: 'h_in_calor_q', v: [
-      { q: 'Es un día de mucho calor y trabajas en el parque. ¿Qué haces?', o: ['Tomo agua seguido y hago pausas a la sombra', 'Tomo agua solo cuando tengo mucha sed', 'Trabajo sin pausas para terminar antes', 'Me saco la polera para refrescarme'], w: 'Agua seguido, pausas a la sombra y ropa liviana que cubra la piel.' },
-      { q: '¿Cuál de estos es un efecto grave del calor?', o: ['El golpe de calor', 'El resfrío común', 'La hipoacusia', 'El esguince de tobillo'], w: 'El calor causa deshidratación, calambres, agotamiento y golpe de calor, que es una emergencia.' },
-      { q: 'Las tareas pesadas al aire libre conviene hacerlas en las horas de menos calor.', vf: true, w: 'Verdadero. Y se evita el sol entre las 11 y las 16 horas.' }] },
-    // ítems IRL: 22 (protocolo TMERT) y 28 (sobrecarga postural)
-    { s: 'h_in_tmert_q', v: [
-      { q: '¿Cada cuánto se recomiendan las pausas activas?', o: ['Cada 1 a 2 horas', 'Una vez a la semana', 'Solo al terminar el turno', 'Solo cuando hay un dolor fuerte'], w: 'Pausas activas cada 1 a 2 horas para descansar los músculos.' },
-      { q: 'Hace días te duele la muñeca al planchar. ¿Qué haces?', o: ['Lo aviso de inmediato a mi jefatura', 'Espero a que se pase solo', 'Tomo un remedio y sigo igual', 'Lo aviso cuando ya no pueda trabajar'], w: 'Las molestias se avisan temprano, antes de que sean una lesión.' },
-      { q: 'Hacer camas con la espalda doblada y las piernas estiradas protege tu columna.', vf: false, w: 'Falso. Flecta las rodillas y mantén la espalda recta.' }] },
-    // ítems IRL: 23 (Ley Karin, Ley 21.643)
-    { s: 'h_in_karin_q', v: [
-      { q: '¿Qué previene y sanciona la Ley Karin?', o: ['El acoso laboral, el acoso sexual y la violencia en el trabajo', 'Los atrasos y las inasistencias', 'Los accidentes de trayecto', 'El mal uso de los EPP'], w: 'La Ley Karin previene, investiga y sanciona el acoso laboral, el acoso sexual y la violencia en el trabajo.' },
-      { q: '¿Cómo puedes hacer una denuncia por Ley Karin en el hotel?', o: ['Por teléfono, por correo o en forma presencial', 'Solo por carta ante notario', 'Solo a través de un abogado', 'Solo en una reunión con todo el equipo'], w: 'Se puede denunciar por teléfono, por correo o en forma presencial, con confidencialidad.' },
-      { q: 'Una denuncia por Ley Karin se trata con confidencialidad.', vf: true, w: 'Verdadero. La confidencialidad protege a quien denuncia.' }] },
-    // ítems IRL: 46 (violencia laboral, sexual y violencia en el trabajo, también de terceros)
-    { s: 'h_in_violencia_q', v: [
-      { q: 'Un huésped molesto te grita y te insulta en la recepción. ¿Qué haces?', o: ['Mantengo la calma, pido apoyo y lo informo', 'Le respondo con los mismos insultos', 'Me quedo callado y no lo cuento', 'Lo saco del hotel a la fuerza'], w: 'Tolerancia cero a la violencia: mantén la calma, pide apoyo a tu jefatura e infórmalo.' },
-      { q: 'Un huésped te hace comentarios de connotación sexual mientras haces el aseo. ¿Qué haces?', o: ['Salgo de la habitación y lo informo de inmediato', 'Lo ignoro y sigo, es parte del trabajo', 'Cierro la puerta para terminar rápido', 'Lo comento solo con una compañera'], w: 'Es acoso: te retiras, lo informas y se activa el protocolo de la Ley Karin.' },
-      { q: 'La violencia de un huésped contra un trabajador también está considerada en la Ley Karin.', vf: true, w: 'Verdadero. Incluye la violencia que ejercen clientes, huéspedes o proveedores.' }] },
-    // ítems IRL: 24 (protocolo PREXOR) y 36 (exposición a ruido)
-    { s: 'h_in_ruido_q', v: [
-      { q: '¿Qué daño produce el ruido fuerte en el oído?', o: ['Pérdida de audición permanente', 'Un daño que se pasa en una hora', 'Solo un dolor de cabeza pasajero', 'Ningún daño, si uno se acostumbra'], w: 'La hipoacusia por ruido es permanente: no se recupera.' },
-      { q: 'Vas a usar el cortapasto. ¿Cuándo usas el protector auditivo?', o: ['Todo el tiempo que esté funcionando', 'Solo al encenderlo', 'Solo si hay huéspedes cerca', 'Me lo saco para escuchar el motor'], w: 'El protector auditivo es obligatorio todo el tiempo de exposición al ruido.' },
-      { q: 'Si estás expuesto a ruido, debes asistir a tus exámenes de audiometría.', vf: true, w: 'Verdadero. Las audiometrías detectan el daño a tiempo.' }] },
-    // ítems IRL: 25 (radiación UV, protocolo) y 38 (radiación UV solar, medidas)
-    { s: 'h_in_uv_q', v: [
-      { q: '¿Cada cuánto debes volver a ponerte bloqueador al trabajar al sol?', o: ['Cada 2 horas', 'Una vez al día, en la mañana', 'Solo cuando me arde la piel', 'Una vez a la semana'], w: 'Bloqueador factor 50 o más, cada 2 horas.' },
-      { q: '¿Qué protección corresponde para trabajar al sol en el parque?', o: ['Bloqueador, manga larga, legionario y lentes con filtro UV', 'Polera sin mangas y gorro de lana', 'Solo lentes oscuros comunes', 'Ninguna, si el día está nublado'], w: 'Bloqueador, manga larga, legionario, lentes con filtro UV, sombra y agua.' },
-      { q: 'En los días nublados no hay radiación UV, así que no se necesita bloqueador.', vf: false, w: 'Falso. La radiación UV atraviesa las nubes.' }] },
-    // ítems IRL: 26 (protocolo de riesgos psicosociales)
-    { s: 'h_in_psico_q', v: [
-      { q: '¿Con qué cuestionario se evalúan los riesgos psicosociales?', o: ['CEAL-SM', 'HDS', 'PREXOR', 'TMERT'], w: 'El CEAL-SM evalúa los riesgos psicosociales. La HDS es de químicos, PREXOR de ruido y TMERT de posturas.' },
-      { q: '¿Para qué se usan los resultados de la evaluación psicosocial?', o: ['Para hacer planes de acción que mejoren el trabajo', 'Para sancionar a quien responda mal', 'Para decidir los sueldos', 'Para elegir a quién cambiar de turno'], w: 'Los resultados sirven para hacer planes de acción.' },
-      { q: 'La carga de trabajo, el liderazgo y el ambiente laboral son factores de riesgo psicosocial.', vf: true, w: 'Verdadero. También la organización del trabajo.' }] },
-    // ítems IRL: 30 (caídas al mismo nivel)
-    { s: 'h_in_caidas_q', v: [
-      { q: 'Trapeaste el pasillo de las habitaciones. ¿Qué haces mientras se seca?', o: ['Pongo el letrero de piso mojado', 'Nada, se seca rápido', 'Aviso solo a los huéspedes que vea', 'Pongo una toalla encima'], w: 'El piso mojado se señaliza hasta que esté seco.' },
-      { q: '¿Qué calzado reduce las caídas en baños y cocina?', o: ['Cerrado y antideslizante', 'Sandalias abiertas', 'Zapatos de suela lisa', 'Zapatillas con la suela gastada'], w: 'Calzado cerrado y antideslizante.' },
-      { q: 'Caminar apurado mirando el celular aumenta el riesgo de caídas.', vf: true, w: 'Verdadero. Camina sin apuro y atento a dónde pisas.' }] },
     // ítems IRL: 31 (caídas de distinto nivel, trabajo en altura)
     { s: 'h_in_silla_q', v: [
       { q: '¿Desde qué altura debes usar arnés con doble línea de vida?', o: ['Sobre 1,8 metros', 'Sobre 5 metros', 'Sobre 10 metros', 'Solo en los techos'], w: 'Sobre 1,8 metros es trabajo en altura: arnés con doble línea de vida.' },
       { q: 'Necesitas cambiar una ampolleta alta en una habitación. ¿Cómo lo haces?', o: ['Con una escala revisada, nunca sobre una silla', 'Subido a una silla, con cuidado', 'Subido a la cama, que es firme', 'Sobre un cajón apoyado en la pared'], w: 'Nunca sillas, camas ni cajones: escala certificada y revisada.' },
       { q: 'Sin examen de altura vigente, no se puede trabajar en altura.', vf: true, w: 'Verdadero. Sin examen de altura, no se sube.' }] },
-    // ítems IRL: 33 (cortes)
-    { s: 'h_in_cortes_q', v: [
-      { q: '¿Cómo debes cortar con un cuchillo?', o: ['Sobre una tabla firme y hacia afuera del cuerpo', 'En el aire, sujetando el alimento', 'Hacia el cuerpo, para tener control', 'Sobre la palma de la mano'], w: 'Superficie firme y corte hacia afuera, nunca hacia el cuerpo ni en el aire.' },
-      { q: 'Se rompió un vaso en una habitación. ¿Cómo lo recoges?', o: ['Con pala y escobillón, no con la mano', 'Con la mano, rápido', 'Lo empujo debajo de la cama', 'Lo envuelvo en la sábana sucia'], w: 'Los vidrios se recogen con pala: con la mano te cortas.' },
-      { q: 'Un cuchillo se puede dejar dentro del lavaplatos con agua y espuma.', vf: false, w: 'Falso. Quien meta la mano no lo ve y se corta.' }] },
-    // ítems IRL: 34 (proyección de partículas)
-    { s: 'h_in_particulas_q', v: [
-      { q: 'Vas a usar la orilladora en el parque. ¿Qué protege tus ojos?', o: ['Lentes de seguridad o careta', 'Lentes de sol comunes', 'Una gorra con visera', 'Nada, si trabajo con cuidado'], w: 'Lentes de seguridad o careta: las piedras salen disparadas.' },
-      { q: 'Mientras usas la orilladora, se acerca un niño huésped. ¿Qué haces?', o: ['La detengo hasta que se aleje', 'Sigo, el niño se va a correr solo', 'Le grito que se aleje y sigo', 'Apunto hacia otro lado y sigo'], w: 'Antes y durante el trabajo se aleja a las personas; si alguien se acerca, se detiene la herramienta.' },
-      { q: 'Las herramientas que lanzan partículas se usan con sus protecciones puestas.', vf: true, w: 'Verdadero. La protección desvía lo que sale disparado.' }] },
-    // ítems IRL: 35 (atrapamientos, bloqueo y etiquetado)
+    // ítems IRL: 35 (atrapamientos, bloqueo y etiquetado) y 39 (anillos, pulseras, accesorios y ropa suelta)
     { s: 'h_in_atrapa_q', v: [
       { q: 'Se enreda una sábana en la planchadora. ¿Qué haces?', o: ['La detengo y la bloqueo antes de sacarla', 'Tiro la sábana con la máquina andando', 'Meto la mano rápido entre los rodillos', 'Le pido a otro que la saque mientras gira'], w: 'Nunca la mano en un equipo en movimiento: se detiene y se bloquea.' },
       { q: '¿Qué significa bloquear y etiquetar un equipo?', o: ['Dejarlo sin energía y señalizado para que nadie lo encienda', 'Ponerle una etiqueta con la fecha de compra', 'Cerrar la sala con llave al final del día', 'Anotar quién lo usó por última vez'], w: 'Bloquear y etiquetar es dejar el equipo sin energía y señalizado, para que nadie lo encienda mientras lo intervienes.' },
-      { q: 'Se puede abrir la secadora mientras el tambor aún gira, si se hace con cuidado.', vf: false, w: 'Falso. Se abre solo con el tambor detenido.' }] },
-    // ítems IRL: 39 (anillos, aros, gargantillas, pulseras, accesorios y ropa suelta)
-    { s: 'h_in_joyas_q', v: [
-      { q: 'Vas a trabajar en la lavandería. ¿Qué haces con tu anillo y tu pulsera?', o: ['Me los saco antes de empezar', 'Los cubro con un guante', 'Me dejo el anillo, que es chico', 'Los uso, pero con cuidado'], w: 'Las joyas se enganchan en las partes móviles: se sacan antes de empezar.' },
-      { q: '¿Por qué se prohíben las joyas y la ropa suelta cerca de las máquinas?', o: ['Se pueden enganchar y causar desgarros o amputaciones', 'Porque se pueden perder', 'Solo por la imagen ante los huéspedes', 'Porque se manchan con detergente'], w: 'Un anillo o una manga suelta puede arrastrar la mano hacia la máquina.' },
-      { q: 'El pelo largo suelto se puede enganchar en las partes móviles de un equipo.', vf: true, w: 'Verdadero. El pelo va tomado.' }] },
-    // ítems IRL: 40 (riesgo eléctrico)
-    { s: 'h_in_electrico_q', v: [
-      { q: 'Un hervidor tiene el cable pelado. ¿Qué haces?', o: ['No lo uso y aviso para que lo reparen', 'Lo envuelvo con cinta y lo uso', 'Lo uso sin tocar el cable', 'Lo uso solo con las manos secas'], w: 'Un cable dañado puede electrocutar o causar un incendio: no se usa y se avisa.' },
-      { q: '¿Quién puede intervenir un tablero eléctrico?', o: ['Solo el personal autorizado', 'Cualquiera que sepa un poco', 'El primero que esté cerca', 'Cualquier trabajador con guantes'], w: 'Solo el personal autorizado, con el equipo desconectado y bloqueado.' },
-      { q: 'Conectar muchos equipos a un mismo enchufe múltiple puede causar un incendio.', vf: true, w: 'Verdadero. La sobrecarga calienta los cables.' }] },
-    // ítems IRL: 41 (incendios)
-    { s: 'h_in_incendio_q', v: [
-      { q: '¿Cómo deben estar las vías de evacuación?', o: ['Siempre libres y señalizadas', 'Libres solo de día', 'Con carros, solo de noche', 'Cerradas con llave por seguridad'], w: 'Las vías de evacuación están siempre libres y señalizadas.' },
-      { q: '¿Para qué sirven los simulacros?', o: ['Para practicar la evacuación antes de una emergencia real', 'Para evaluar el trabajo de cada uno', 'Para probar si los huéspedes despiertan', 'Solo para cumplir con un papel'], w: 'Los simulacros preparan a todos para actuar bien en una emergencia real.' },
-      { q: 'Los productos inflamables se guardan bien cerrados y lejos de fuentes de calor.', vf: true, w: 'Verdadero. Así se evita un incendio.' }] },
-    // ítems IRL: 37 (atropellamiento) y 43 (exposición a tránsito de vehículos en accesos y estacionamientos)
-    { s: 'h_in_transito_q', v: [
-      { q: 'Debes cruzar el estacionamiento del hotel. ¿Cómo lo haces?', o: ['Por el cruce peatonal, atento a los vehículos', 'Por el camino más corto, entre los autos', 'Mirando el celular, si voy rápido', 'Por detrás de un auto que retrocede'], w: 'Se cruza por las zonas demarcadas, atento a los vehículos y sin celular.' },
-      { q: 'Te toca trabajar en el estacionamiento. ¿Qué ropa usas?', o: ['Ropa de alta visibilidad', 'Ropa oscura para no ensuciarla', 'Ropa de calle, sin reflectante', 'Un delantal de cocina'], w: 'La ropa de alta visibilidad permite que los conductores te vean.' },
-      { q: 'En el acceso o el estacionamiento se puede caminar mirando el celular si no hay autos a la vista.', vf: false, w: 'Falso. Un auto puede aparecer en segundos: se camina atento y sin celular.' }] },
-    // ítems IRL: 42 (atropellamientos, choques y volcamientos al conducir)
-    { s: 'h_in_conducir_q', v: [
-      { q: 'Vas a conducir un vehículo del hotel. ¿Qué es lo correcto?', o: ['Revisarlo, usar cinturón y no usar el celular', 'Usar el celular solo en las rectas', 'Ponerme el cinturón solo en carretera', 'Manejar aunque esté muy cansado'], w: 'Revisión del vehículo, cinturón, velocidad señalizada y cero celular.' },
-      { q: 'Tomaste un medicamento que da sueño y te piden manejar. ¿Qué haces?', o: ['No manejo y le aviso a mi jefatura', 'Manejo más despacio', 'Manejo con la ventana abierta', 'Manejo solo un tramo corto'], w: 'No se conduce con alcohol, medicamentos que dan sueño ni cansancio.' },
-      { q: 'La conducción defensiva consiste en anticiparse a los errores de otros conductores y peatones.', vf: true, w: 'Verdadero. Conducir a la defensiva evita choques y atropellos.' }] },
-    // ítems IRL: 45 (accidentes de trayecto)
-    { s: 'h_in_trayecto_q', v: [
-      { q: '¿Qué es un accidente de trayecto?', o: ['El que ocurre en el camino directo entre la casa y el trabajo', 'El que ocurre dentro de la cocina', 'Cualquier accidente en un día libre', 'El que ocurre al ir de compras después del turno'], w: 'Es el que ocurre en el trayecto directo, de ida o regreso, entre la casa y el trabajo.' },
-      { q: 'Vienes al hotel en bicicleta. ¿Qué te protege?', o: ['Casco y luces', 'Audífonos con música', 'Ropa oscura y sin luces', 'Ir rápido por la vereda'], w: 'En bicicleta: casco y luces, y atento al tránsito.' },
-      { q: 'El accidente de trayecto también está cubierto por el seguro de la Ley 16.744.', vf: true, w: 'Verdadero. Avisa de inmediato a tu jefatura si te ocurre.' }] },
-    // ítems IRL: sección E completa (información de los riesgos del puesto, riesgo, consecuencia y medidas)
-    { s: 'h_in_puesto_q', v: [
-      { q: '¿Qué debe informarte la empresa sobre tu puesto de trabajo?', o: ['Sus riesgos, sus consecuencias y las medidas para controlarlos', 'Solo el horario y el sueldo', 'Solo los riesgos que ya causaron accidentes', 'Solo las sanciones por no usar el EPP'], w: 'Se informan los riesgos del puesto, sus consecuencias y las medidas preventivas.' },
-      { q: '¿Cuándo debe informarte la empresa los riesgos de tu puesto?', o: ['Al ingresar y cada vez que cambien mi puesto o mis tareas', 'Solo cuando ocurre un accidente', 'Una vez al año, en diciembre', 'Solo si lo pido por escrito'], w: 'Al ingresar y cada vez que cambien los procesos, los equipos o tu puesto.' },
-      { q: 'Si no entiendes un riesgo de tu puesto, debes preguntar antes de firmar tu información de riesgos.', vf: true, w: 'Verdadero. Firmar es dejar constancia de que entendiste.' }] },
-    // ítems IRL: 47 (procedimientos de trabajo seguro: tránsito peatonal, cocina, altura, plan de emergencia y uso seguro del teléfono móvil)
+      { q: 'Vas a trabajar en la lavandería. ¿Qué haces con tu anillo y tu pulsera?', o: ['Me los saco antes de empezar', 'Los cubro con un guante', 'Me dejo el anillo, que es chico', 'Los uso, pero con cuidado'], w: 'Las joyas y la ropa suelta se enganchan en las partes móviles: se sacan antes de empezar.' }] },
+    // ítems IRL: 23 (Ley Karin, Ley 21.643) y 46 (violencia laboral, sexual y violencia en el trabajo, también de huéspedes)
+    { s: 'h_in_violencia_q', v: [
+      { q: '¿Qué previene y sanciona la Ley Karin?', o: ['El acoso laboral, el acoso sexual y la violencia en el trabajo', 'Los atrasos y las inasistencias', 'Los accidentes de trayecto', 'El mal uso de los EPP'], w: 'La Ley Karin previene, investiga y sanciona el acoso laboral, el acoso sexual y la violencia en el trabajo.' },
+      { q: 'Un huésped te hace comentarios de connotación sexual mientras haces el aseo. ¿Qué haces?', o: ['Salgo de la habitación y lo informo de inmediato', 'Lo ignoro y sigo, es parte del trabajo', 'Cierro la puerta para terminar rápido', 'Lo comento solo con una compañera'], w: 'Es acoso: te retiras, lo informas y se activa el protocolo de la Ley Karin. Tolerancia cero.' },
+      { q: 'Un huésped molesto te grita e insulta en la recepción. ¿Qué haces?', o: ['Mantengo la calma, pido apoyo y lo informo', 'Le respondo con los mismos insultos', 'Me quedo callado y no lo cuento', 'Lo saco del hotel a la fuerza'], w: 'La violencia de huéspedes también está considerada: mantén la calma, pide apoyo e infórmalo. La denuncia es confidencial.' }] },
+    // ítems IRL: 24 y 36 (ruido), 25 y 38 (radiación UV) y 21 (altas temperaturas)
+    { s: 'h_in_agentes_q', v: [
+      { q: '¿Qué daño produce el ruido fuerte de la motosierra o el cortapasto en el oído?', o: ['Pérdida de audición permanente', 'Un daño que se pasa en una hora', 'Solo un dolor de cabeza pasajero', 'Ningún daño, si uno se acostumbra'], w: 'La hipoacusia por ruido es permanente: el protector auditivo es obligatorio todo el tiempo.' },
+      { q: '¿Cada cuánto debes volver a ponerte bloqueador al trabajar al sol?', o: ['Cada 2 horas', 'Una vez al día, en la mañana', 'Solo cuando me arde la piel', 'Una vez a la semana'], w: 'Bloqueador factor 50 o más, cada 2 horas, con manga larga, legionario y lentes con filtro UV.' },
+      { q: '¿Cuál de estos es un efecto grave del calor al trabajar en el parque?', o: ['El golpe de calor', 'El resfrío común', 'La hipoacusia', 'El esguince de tobillo'], w: 'El calor causa deshidratación, calambres y golpe de calor: agua seguido y pausas a la sombra.' }] },
+    // ítems IRL: 47 (procedimientos de trabajo seguro) y sección E (información de los riesgos del puesto)
     { s: 'h_in_pts_q', v: [
       { q: '¿Qué procedimiento del hotel indica cómo actuar en un sismo o un incendio?', o: ['El Plan de emergencia', 'Trabajos en cocina', 'Tránsito peatonal', 'Trabajos en altura'], w: 'El Plan de emergencia indica cómo actuar, evacuar y llegar a la zona de seguridad.' },
       { q: 'Según el procedimiento de uso seguro del teléfono móvil, ¿cuándo puedes usar el celular?', o: ['En un lugar seguro, con autorización y sin descuidar la tarea', 'Mientras bajo por la escalera', 'Mientras uso la motosierra, si es urgente', 'Mientras conduzco, si la llamada es corta'], w: 'El celular se usa en un espacio seguro, con autorización de la jefatura y sin interferir con la tarea.' },
-      { q: 'Al recibir un procedimiento de trabajo seguro, debes leerlo, cumplirlo y preguntar si tienes dudas.', vf: true, w: 'Verdadero. Los procedimientos se conocen y se cumplen siempre.' }] }
+      { q: '¿Qué debe informarte la empresa sobre tu puesto de trabajo?', o: ['Sus riesgos, sus consecuencias y las medidas para controlarlos', 'Solo el horario y el sueldo', 'Solo los riesgos que ya causaron accidentes', 'Solo las sanciones por no usar el EPP'], w: 'Se informan los riesgos del puesto, sus consecuencias y las medidas preventivas, al ingresar y cada vez que cambie tu puesto.' }] }
   ];
 
-  // Verificación (05-11-2026): los ítems 1 a 47 de la inducción escrita tienen al menos una pregunta (41 preguntas, 3 versiones cada una).
+  // Verificación (06-11-2026), ítem de la inducción escrita → pregunta (P) o actividad (A):
+  //  1 A1 · 2 P5 A2 · 3 P7 A1 · 4 A1 · 5 A1 A2 · 6 solo lámina · 7 A1 · 8 A3 · 9 A4 · 10 solo lámina · 11 P1 · 12 P2 · 13 P3 · 14 P4 · 15 P5 · 16 P6
+  //  17 P7 A5 · 18 P8 A3 · 19 P9 A4 · 20 P10 A3 · 21 P14 A4 · 22 A4 · 23 P13 · 24 P14 A4 · 25 P14 A4 · 26 P4 · 27 A4 · 28 A4 · 29 P8 A3 · 30 A1 · 31 P11 A3
+  //  32 A1 · 33 A2 · 34 A5 · 35 P12 A3 · 36 P14 A4 · 37 A5 · 38 P14 A4 · 39 P12 A2 · 40 A3 · 41 P6 A5 · 42 A5 · 43 A5 · 44 A1 · 45 A5 · 46 P13 · 47 P15 (y sección E en P15)
   SI_CONT.temas.push({ id: 'induccion', sec: 'todos', emp: ['hotel'], title: 'Inducción de Prevención de Riesgos (IRL)', thumb: 'h_in_empresa', mins: 45, learn, quiz });
 
-  // ===================== ACTIVIDADES =====================
+  // ===================== ACTIVIDADES (cada una cuenta como una pregunta más) =====================
   window.HT_ACT = (window.HT_ACT || []).concat([
-    { tema: 'induccion', tipo: 'tarjetas', q: '🧩 Actividad: ¿así sí o así no? Desliza cada tarjeta.', binario: true, cats: ['✅ Así sí', '❌ Así no'], sub: ['', ''],
+    // A1 · ítems IRL: 1 y 7 (orden y limpieza), 3 (no obstruir el paso), 4 (residuos), 5 (higiene personal), 30 (caídas al mismo nivel), 32 y 44 (golpes y herramientas mal ubicadas)
+    { tema: 'induccion', tipo: 'tarjetas', q: '🧩 Actividad: orden, limpieza y pisos. ¿Así sí o así no? Desliza cada tarjeta.', binario: true, cats: ['✅ Así sí', '❌ Así no'], sub: ['', ''],
       items: [['Dejar el carro de aseo en medio del pasillo', 1, 'h_in_c_carro'], ['Poner el letrero de piso mojado después de trapear', 0, 'h_in_c_mojado'],
-        ['Mezclar cloro con otro producto para limpiar mejor', 1, 'h_in_c_mezcla'], ['Levantar una caja flectando las rodillas', 0, 'h_in_c_levanta'],
-        ['Abrir la secadora con el tambor girando', 1, 'h_in_c_secadora'], ['Mantener el pasillo de la bodega libre y ordenado', 0, 'h_in_c_pasillo']],
-      w: 'Así sí: señalizar el piso mojado, levantar con las rodillas flectadas y mantener los pasillos libres. Así no: carros en el paso, mezclar químicos o abrir una máquina en movimiento.' },
-    { tema: 'induccion', tipo: 'vestir', q: '🧩 Actividad: prepara a la persona que va a trabajar en la cocina.',
-      items: [['Cofia', 1, 'cofia', { cofia: true }], ['Pechera', 1, 'pechera', { apron: '#E0E0E0', shirt: '#FFFFFF' }], ['Calzado cerrado antideslizante', 1, 'zapatos', { boots: '#263238' }],
+        ['Mantener el pasillo de la bodega libre y ordenado', 0, 'h_in_c_pasillo'], ['Botar los residuos en los basureros habilitados', 0, 'h_in_c_residuos'],
+        ['Lavarse las manos antes de volver a la cocina', 0, 'h_in_c_manos'], ['Dejar un martillo en el borde de una repisa, sobre el pasillo', 1, 'h_in_c_borde']],
+      w: 'Así sí: pasillos libres, letrero de piso mojado, residuos en su lugar y manos limpias. Así no: carros en el paso ni herramientas en bordes, donde caen o golpean.' },
+    // A2 · ítems IRL: 2 (EPP de la función), 5 (higiene: cofia), 33 (cortes: guante anticorte), 39 (sin joyas) y 30 (calzado antideslizante)
+    { tema: 'induccion', tipo: 'vestir', q: '🧩 Actividad: prepara a la persona que va a picar verduras en la cocina.',
+      items: [['Cofia', 1, 'cofia', { cofia: true }], ['Pechera', 1, 'pechera', { apron: '#E0E0E0', shirt: '#FFFFFF' }], ['Guante anticorte para picar', 1, 'guantes#90A4AE', { gloves: '#90A4AE' }],
+        ['Calzado cerrado antideslizante', 1, 'zapatos', { boots: '#263238' }],
         ['Anillo', 0, 'anillo', null, 'El anillo se puede enganchar en un equipo y acumula suciedad.'], ['Pulsera', 0, 'pulsera', null, 'La pulsera se engancha en mangos y equipos de cocina.'],
         ['Sandalias', 0, 'sandalias', null, 'Las sandalias resbalan y no protegen de líquidos calientes ni de cuchillos.']],
-      w: 'En la cocina: cofia con todo el pelo adentro, pechera y calzado cerrado antideslizante. Sin anillos, pulseras ni sandalias.' }
+      w: 'Para picar en la cocina: cofia con todo el pelo adentro, pechera, guante anticorte y calzado cerrado antideslizante. Sin anillos, pulseras ni sandalias.' },
+    // A3 · ítems IRL: 8 (equipos solo con capacitación), 18 y 29 (carga), 20 (químicos), 31 (altura), 35 (atrapamiento), 40 (riesgo eléctrico)
+    { tema: 'induccion', tipo: 'tarjetas', q: '🧩 Actividad: equipos, cargas y químicos. ¿Así sí o así no? Desliza cada tarjeta.', binario: true, cats: ['✅ Así sí', '❌ Así no'], sub: ['', ''],
+      items: [['Recibir capacitación antes de usar la planchadora', 0, 'h_in_c_capacita'], ['Levantar una caja flectando las rodillas', 0, 'h_in_c_levanta'],
+        ['Mezclar cloro con otro producto para limpiar mejor', 1, 'h_in_c_mezcla'], ['Abrir la secadora con el tambor girando', 1, 'h_in_c_secadora'],
+        ['Seguir usando un enchufe múltiple sobrecargado y con el cable pelado', 1, 'h_in_c_cable'], ['Subirse a una silla para cambiar una ampolleta', 1, 'h_in_c_silla']],
+      w: 'Así sí: capacitarse antes de usar un equipo y levantar con las rodillas flectadas. Así no: mezclar químicos, abrir máquinas en movimiento, sobrecargar enchufes o subirse a sillas.' },
+    // A4 · ítems IRL: 9 y 27 (ambiente e iluminación), 19 (hantavirus), 21 (calor), 22 y 28 (TMERT y posturas), 24 y 36 (ruido), 25 y 38 (radiación UV)
+    { tema: 'induccion', tipo: 'tarjetas', q: '🧩 Actividad: cuida tu salud. ¿Así sí o así no? Desliza cada tarjeta.', binario: true, cats: ['✅ Así sí', '❌ Así no'], sub: ['', ''],
+      items: [['Barrer en seco la leñera que estuvo cerrada', 1, 'h_in_c_barrer'], ['Tomar agua seguido y descansar a la sombra en días de calor', 0, 'h_in_c_agua'],
+        ['Ponerse bloqueador y legionario para trabajar al sol', 0, 'h_in_c_bloq'], ['Usar el cortapasto con el protector auditivo colgado al cuello', 1, 'h_in_c_fonos'],
+        ['Hacer pausas activas cada 1 a 2 horas', 0, 'h_in_c_pausa'], ['Avisar a la jefatura que una luz parpadea', 0, 'h_in_c_luz']],
+      w: 'Así sí: agua y sombra, bloqueador y legionario, pausas activas y avisar las luces con falla. Así no: barrer en seco donde hay ratones ni usar el protector auditivo en el cuello.' },
+    // A5 · ítems IRL: 17 (fumar solo en la zona habilitada), 34 (partículas), 37 y 43 (atropello en accesos y estacionamiento), 41 (incendio), 42 (conducción), 45 (trayecto)
+    { tema: 'induccion', tipo: 'tarjetas', q: '🧩 Actividad: parque, estacionamiento y trayecto. ¿Así sí o así no? Desliza cada tarjeta.', binario: true, cats: ['✅ Así sí', '❌ Así no'], sub: ['', ''],
+      items: [['Cruzar el estacionamiento por el cruce peatonal', 0, 'h_in_c_cruce'], ['Conducir un vehículo mirando el celular', 1, 'h_in_c_celauto'],
+        ['Venir en bicicleta con casco y luces', 0, 'h_in_c_bici'], ['Fumar junto a la leña de las calderas', 1, 'h_in_c_fumar'],
+        ['Dejar un bidón de bencina al lado de la caldera encendida', 1, 'h_in_c_bencina'], ['Usar la orilladora con lentes de seguridad y protector auditivo', 0, 'h_in_c_orilla']],
+      w: 'Así sí: cruce peatonal, casco y luces en bicicleta, lentes y protector auditivo con la orilladora. Así no: celular al conducir, fumar fuera de la zona habilitada ni dejar inflamables cerca del calor.' }
   ]);
 })();
 
